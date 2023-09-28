@@ -21,6 +21,7 @@ The following points are planned features that will be implemented in future ver
 - **Support for macros.**
 - **Support for built in debugging tools.**
 - **Support for extracting values from the virtual machine's registers and memory for external usage.**
+- **Changes to the parser:** The parser currently uses a hard coded instruction structure system to parse the instructions from the generated tokens. In future versions, it will be updated to a more flexible system like an AST (Abstract syntax tree) or a system to detect instructions of the different types that exist in MIPS architectures (R-type, I-type, J-type).
 
 ## Usage
 To use this simple MIPS Simulator in your C++ project, you can simply include the "Mips.h" header in your project and use the MipsSimulator::loadSource(src) and MipsSimulator::runProgram() functions to load an external text file with the MIPS source code and execute the code.
