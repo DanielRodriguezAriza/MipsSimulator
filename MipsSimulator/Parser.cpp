@@ -24,9 +24,6 @@ void Parser::parseTokens()
 		switch(getCurrent().type)
 		{
 		case TOKEN_IDENTIFIER:
-			//scanInstruction();
-			//scan identifier.
-			//std::cout<<"Identifier found!!!! " << getCurrent()<<"\n";
 			
 			if(getNext().type == TOKEN_COLON && table.getSymbolIndex(getCurrent().lexeme) != -1)
 			{
@@ -54,7 +51,7 @@ void Parser::parseTokens()
 	}
 }
 
-void Parser::preprocess() //reimplement as preprocessor class' function.... also need to make all the scanner like classes inherit from some kind of basic scanner class because a lot of overlap exists.
+void Parser::preprocess() //maybe reimplement as preprocessor class that handles macro code generation and tag replacement.
 {
 	while(!isAtEnd())
 	{
@@ -73,7 +70,7 @@ void Parser::preprocess() //reimplement as preprocessor class' function.... also
 		incrementIndex();
 	}
 	
-	this->current_index = 0; //puta gitanada de la ostia.
+	this->current_index = 0; //return to start of the token list to actually start parsing the code after tags have been replaced.
 }
 
 void Parser::scanIdentifier()
@@ -103,72 +100,6 @@ void Parser::scanIdentifier()
 		}
 	}
 }
-
-
-/*
-"nop"
-"li"
-"add" "addi" "addu" "addiu"
-"sub" "subi" "subu" "subiu"
-"mul" "muli"
-"div" "divi"
-"move"
-"syscall",
-"jump" "jmp" "j"
-"jr"
-*/
-
-
-// To make this NOT suck i should maybe find a way to actually implement a good system for instruction parsing... maybe using the AST stuff.
-
-/*
-void Interpreter::scanLi()
-{
-	//li $v0, 10
-	//tokens:
-	//current = li
-	//next = {"$", "register identifier", "," , "value number"}
-	
-	InstructionType t = LI;
-	unsigned int r1,r2;
-	
-	if(getNext().type == TOKEN_DOLLAR)
-	{
-		incrementIndex();
-		if(getNext().type == TOKEN_IDENTIFIER)
-		{
-			r1 = getRegisterFromText(getNext().lexeme);
-			if(r1 != -1)
-			{
-				incrementIndex();
-				if(getNext().type == TOKEN_COMMA)
-				{
-					incrementIndex();
-					if(getNext().type == TOKEN_NUMBER)
-					{
-						r2 = std::stoi(getNext().lexeme);
-						incrementIndex();
-						if(getNext().type == TOKEN_NEWLINE || getNext().type == TOKEN_EOF)
-						{
-							addInstruction(t,r1,r2);
-						}
-					}
-				}
-			}
-			else
-			{
-				printf("Error: Specified Register does not exist!\n");
-				exit(-1);
-			}
-		}
-		else
-		if(getNext().type == TOKEN_NUMBER)
-		{
-			//ans.r1 = number.eval()..... etc...
-		}
-	}
-}
-*/
 
 void Parser::scanLi()
 {
@@ -293,7 +224,7 @@ void Parser::scanJumpReg()
 	}
 }
 
-//important notes about mul vs mult: mul does not modify hi and lo, tho older MIPS CPUs and simulators like mars and spim do so... mul seems to be for when you care about doing a simple 32 bit multiplication. Mult is for when you either want to know what the 64 bit result is (overflown multiplication) or if you want to get the modulo or whatever tf...
+//important notes about mul vs mult: mul does not modify hi and lo, tho older MIPS CPUs and simulators like mars and spim do so... mul seems to be for when you care about doing a simple 32 bit multiplication. Mult is for when you either want to know what the 64 bit result is ("overflown multiplication")
 void Parser::scanMul()
 {
 	//mul $t0, $t1, $t2
@@ -329,10 +260,10 @@ void Parser::scanNop()
 	}
 }
 
-//maybe could use this as a bool to get if the instructions are valid or something idk...
+//TODO: maybe could use this as a bool to get if the instructions are valid or have some kind of pointer to a bool that indicates if the structure is valid so that you can handle errors externally.
 /*
 void Interpreter::scanInstructionWithStructure(InstructionType type, bool has_r1, bool has_r2, bool has_r3)
-{}
+{...}
 */
 
 
@@ -341,7 +272,7 @@ void Parser::scanInstruction()
 	TokenType type = getCurrent().type;
 	
 	switch(type)
-	{ //modify the scan functions to scan for 0, 1, 2 and 3 argument instructions or custom made ones for macros etc... instead of having an individual but almost identical scan function for each and every single instruction. That means you need to add some "scan R type instruction" or whatever functions...
+	{ //modify the scan functions to scan for 0, 1, 2 and 3 argument instructions or custom made ones for macros etc... instead of having an individual but almost identical scan function for each and every single instruction. That means you need to add some "scan R type instruction", "scan J type instruction", etc...
 	default:
 		std::cout << "Error: Unknown instruction detected : " << getCurrent() << "\n";
 		break;

@@ -6,7 +6,7 @@
 
 enum InstructionType
 {
-    // DIVI : this one doesnt actually exist in mips but i want to create it for consistency sake.
+    // DIVI : this one doesnt actually exist in mips but i want to create it for consistency sake during debugging. Will remove later when i have a more stable project.
     UNKNOWN_INSTRUCTION = 0,
 	NOP,
     LI,
@@ -36,7 +36,7 @@ char const *const InstructionNames[] = {
     "NUM_INSTRUCTIONS",
 };
 
-//optimize this struct by adding a few functions that allows me to do bitwise operations to extract the type, values from registers, etc... so that i can use a single int to store everything. This comes with the added limitation that i will need multiple li instructions with the $at register when translating the interpreted mips code into actual instructions, because i can only have 16 bits worth of immediates if i actually do what the hardware does in real life.
+//optimize this struct by adding a few functions that allows me to do bitwise operations to extract the type, values from registers, etc... so that i can use a single int to store everything. This comes with the added limitation that i will need multiple li instructions with the $at register when translating the interpreted mips code into actual instructions, because i can only have 16 bits worth of immediates if i actually do what the hardware does in real life. For now it's implemented for ease of use from the programmer's point of view, but it would be ideal to actually generate proper bytecode where each instruction is at least identical bitwise to the real instructions the architecture executes.
 struct Instruction
 {
 public:
@@ -103,7 +103,7 @@ enum Registers
     $sp,
     $fp,
     $ra,
-	NUM_REGISTERS //in mips its always 32
+	NUM_REGISTERS //in mips it's always 32
 };
 
 char const * const RegisterNames[] = {

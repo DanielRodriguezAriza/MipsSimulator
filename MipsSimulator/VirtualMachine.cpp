@@ -231,9 +231,6 @@ void VirtualMachine::LoadBytesIntoMemory(int address, char *bytes, int len)
 }
 
 //TODO: implement the program as an array that is in the ROM of the VM. That way i can load and unload programs, as well as determine what address the tags correspond to when i want to implement jumps. Also i need to work on the implementation of the stack and the functionality of the stack pointer and such.
-//TODO: implement a system to read file that contain programs and then a system to interpret the code and translate the text into real tokens and such that can be used to generate the actual code in the vm's program instructions list.
-
-
 
 #include <iostream>
 

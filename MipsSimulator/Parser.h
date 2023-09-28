@@ -6,12 +6,6 @@
 #include "VirtualMachine.h"
 #include "Symbol.h"
 
-//im calling this the "interpreter" but its more like the "compiler" because it will translate whatever token set the scanner generates into the "machine code" that my virtual machine will later interpret, so i need to restructure this stuff... basically this thing is going to be the bytecode generator... weird structuring for now but whatever.
-//btw, another thing, for now the token list generated is just a list of integers that tells me what type of token it has generated, but it does not tell me what text the token contains. For most stuff thats ok, for example i could have a token for every single register, for symbols i dont care about the text, etc... but when it comes to identifiers, i will NEED to store the text somewhere. I need to modify the Token class to contain a string, as well as having a different "addToken" function that allows me to add a token with a symbol optionally.
-//in short: this thing is the one that should be generating the bytecode... not the one interpreting it... that is the purpose of the VirtualMachine. Which obviously means i need to rename some stuff for it to make sense.
-
-//the "good" thing about having this as an interpreter is that now i can get the token vector from the scanner and use it to detect errors at this point of the program. In the scanner i can detect unknown symbols and be done with it. Here i can detect orders of symbols that dont make sense, as well as construct the proper bytecode that will be executed later (hence why this makes more sense to be called a bytecode compiler rather than interpreter but whatever). And then the vm is the one in charge of executing the code. If any exceptions or errors or weird stuff happens, i can then analyse it later and its a process completely independent from this. Now, the question is: Does the VM have an interpreter and an scanner or does the interpreter contain the scanner and then the vm contains the interpreter.... etc etc... or what i said in the first paragraph here.... its all stuff i'll have to figure out later.
-
 class Parser
 {
 public:
@@ -34,8 +28,8 @@ public:
 	
 	inline void setTokens(std::vector<Token> const &newTokens) {this->tokens = newTokens;}
 	
-	inline std::vector<Instruction> getInstructions() const {return this->instructions;} //again same problem, repetitive copies when returning vector...
-	inline std::vector<Token> getTokens() const {return this->tokens;} //this one was added for debugging purposes, but it should be removed for encapsulation in the future.
+	inline std::vector<Instruction> getInstructions() const {return this->instructions;} //problem: repetitive copies when returning vector... implement as ptr or ref later
+	inline std::vector<Token> getTokens() const {return this->tokens;} //this one was added for debugging purposes, but it should be removed for encapsulation in the future. Or maybe i can just ignore OOP and do things in a more sensible way...
 	
 	InstructionType getInstructionType(std::string const &str);
 	

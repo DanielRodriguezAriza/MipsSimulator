@@ -45,7 +45,7 @@ private:
 	std::string source,source_file;
 	std::vector<Token> tokens;
 	size_t current_index;
-	//std::vector<Instruction> instructions; //is this a good idea?
+	
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include <vector>
 #include "Tokens.h"
 
+//TODO:
 //this class generates a symbol table with symbols that contain the tag name and tag value.
 //example:
 /*
